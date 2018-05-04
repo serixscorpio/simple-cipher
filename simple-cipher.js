@@ -1,5 +1,12 @@
 module.exports = function Cipher() {
-  this.key = 'abcdabcdabcd'.repeat(10);
+  this.randomString = (length) => {
+    var alphabet = 'abcdefghijklmnopqrstuvwxyz';
+    var result = '';
+    for (var i = length; i > 0; --i) result += alphabet[Math.floor(Math.random() * 26)];
+    return result;
+	};
+
+  this.key = this.randomString(100);
 
   /*
    * Example:
