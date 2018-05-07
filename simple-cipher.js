@@ -51,14 +51,14 @@ module.exports = function Cipher() {
     return String.fromCharCode(shiftedAsciiCode);
   };
 
-  this.substituteDecode = (cipherChar, keyChar) => {
+  this.substituteDecode = (cipherChar, keyChar, shiftFn) => {
     // 1. turn encoded into ascii
     const cipherAscii = cipherChar.charCodeAt();
     // 2. turn keyChar into ascii
     // 3. calculate how many positions to shift based on step 2
     const positionsToShift = this.calculatePositionsToShift(keyChar);
     // 4. calculate the shifted ascii code (shiftLeft)
-    const shiftedAsciiCode = this.shiftLeft(cipherAscii, positionsToShift);
+    const shiftedAsciiCode = shiftFn(cipherAscii, positionsToShift);
     // 5. turn the shifted ascii code back into character
     return String.fromCharCode(shiftedAsciiCode);
   };
@@ -84,7 +84,7 @@ module.exports = function Cipher() {
     for (let i = 0; i < ciphertext.length; i += 1) {
       const cipherChar = ciphertext[i];
       const keyChar = this.key[i];
-      const decodedChar = this.substituteDecode(cipherChar, keyChar);
+      const decodedChar = this.substituteDecode(cipherChar, keyChar, this.shiftLeft);
       decodetext += decodedChar;
     }
     return decodetext;
