@@ -26,21 +26,41 @@ module.exports = function Cipher() {
     return shiftedAsciiCode;
   };
 
-  this.substitute = (plainChar, keyChar) => {
+  /* Examples, when shifting 3 positions to left
+   * 'd' -> 'a'
+   * 'c' -> 'z'
+   * 'b' -> 'y'
+   */
+  this.shiftLeft = (cipherAscii, positionsToShift) => {
+    let shiftedAsciiCode = cipherAscii - positionsToShift;
+    if (shiftedAsciiCode < 97) { // 97 corresponds to 'a'
+      shiftedAsciiCode += 26;
+    }
+    return shiftedAsciiCode;
+  };
+
+  this.substitute = (plainChar, keyChar, shiftFn) => {
     // 1. turn plainChar into ascii
     const plainAscii = plainChar.charCodeAt();
     // 2. turn keyChar into ascii
     // 3. calculate how many positions to shift based on step 2
     const positionsToShift = this.calculatePositionsToShift(keyChar);
     // 4. calculate the shifted ascii code
-    const shiftedAsciiCode = this.shiftRight(plainAscii, positionsToShift);
-    // 5. turn the shifted ascii code back into character. call this cipherChar.
+    const shiftedAsciiCode = shiftFn(plainAscii, positionsToShift);
+    // 5. turn the shifted ascii code back into character
     return String.fromCharCode(shiftedAsciiCode);
   };
 
-  this.substituteDecode = () => {
-  // 1. turn encoded into ascii
-  // 2. turn
+  this.substituteDecode = (cipherChar, keyChar) => {
+    // 1. turn encoded into ascii
+    const cipherAscii = cipherChar.charCodeAt();
+    // 2. turn keyChar into ascii
+    // 3. calculate how many positions to shift based on step 2
+    const positionsToShift = this.calculatePositionsToShift(keyChar);
+    // 4. calculate the shifted ascii code (shiftLeft)
+    const shiftedAsciiCode = this.shiftLeft(cipherAscii, positionsToShift);
+    // 5. turn the shifted ascii code back into character
+    return String.fromCharCode(shiftedAsciiCode);
   };
 
   this.encode = (plaintext) => {
@@ -52,17 +72,21 @@ module.exports = function Cipher() {
 
       const plainChar = plaintext[i];
       const keyChar = this.key[i];
-      const cipherChar = this.substitute(plainChar, keyChar);
+      const cipherChar = this.substitute(plainChar, keyChar, this.shiftRight);
 
       ciphertext += cipherChar;
-      console.log(ciphertext);
     }
-    return ciphertext; // this is incorrect for now
+    return ciphertext;
   };
 
   this.decode = (ciphertext) => {
     let decodetext = '';
     for (let i = 0; i < ciphertext.length; i += 1) {
+      const cipherChar = ciphertext[i];
+      const keyChar = this.key[i];
+      const decodedChar = this.substituteDecode(cipherChar, keyChar);
+      decodetext += decodedChar;
     }
+    return decodetext;
   };
 };
