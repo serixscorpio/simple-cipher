@@ -51,18 +51,6 @@ module.exports = function Cipher() {
     return String.fromCharCode(shiftedAsciiCode);
   };
 
-  this.substituteDecode = (cipherChar, keyChar, shiftFn) => {
-    // 1. turn encoded into ascii
-    const cipherAscii = cipherChar.charCodeAt();
-    // 2. turn keyChar into ascii
-    // 3. calculate how many positions to shift based on step 2
-    const positionsToShift = this.calculatePositionsToShift(keyChar);
-    // 4. calculate the shifted ascii code (shiftLeft)
-    const shiftedAsciiCode = shiftFn(cipherAscii, positionsToShift);
-    // 5. turn the shifted ascii code back into character
-    return String.fromCharCode(shiftedAsciiCode);
-  };
-
   this.encode = (plaintext) => {
     // plaintext 'aaa...'
     // output: 'bbb...' given the key is 'bbb...'
