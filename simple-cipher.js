@@ -2,9 +2,9 @@ module.exports = function Cipher() {
   this.randomString = (length) => {
     const alphabet = 'abcdefghijklmnopqrstuvwxyz';
     let result = '';
-    for (let i = length; i > 0; --i) result += alphabet[Math.floor(Math.random() * 26)];
+    for (let i = length; i > 0; i -= 1) result += alphabet[Math.floor(Math.random() * 26)];
     return result;
-	};
+  };
 
   this.key = this.randomString(100);
 
@@ -13,6 +13,7 @@ module.exports = function Cipher() {
    * input: 'a' -> output: 0
    * input: 'b' -> output: 1
    */
+  /* eslint arrow-body-style: ["error", "always"] */
   this.calculatePositionsToShift = (character) => {
     return character.charCodeAt() - 97;
   };
@@ -38,8 +39,8 @@ module.exports = function Cipher() {
   };
 
   this.substituteDecode = () => {
-  //1. turn encoded into ascii
-  //2. turn
+  // 1. turn encoded into ascii
+  // 2. turn
   };
 
   this.encode = (plaintext) => {
@@ -60,12 +61,8 @@ module.exports = function Cipher() {
   };
 
   this.decode = (ciphertext) => {
-
-  	let decodetext = '';
-  	for (let i = 0; i < ciphertext.length; i += 1) {
-
-  		}
-
+    let decodetext = '';
+    for (let i = 0; i < ciphertext.length; i += 1) {
+    }
   };
-
 };
