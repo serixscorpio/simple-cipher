@@ -32,14 +32,14 @@ describe('Random key cipher', () => {
     expect(cipher.decode(cipher.key.substr(0, 10))).toEqual('aaaaaaaaaa');
   });
 
-  xtest('is reversible', () => {
+  test('is reversible', () => {
     const plaintext = 'abcdefghij';
     expect(cipher.decode(cipher.encode(plaintext))).toEqual(plaintext);
   });
 });
 
 describe('Incorrect key cipher', () => {
-  xtest('throws an error with an all caps key', () => {
+  test('throws an error with an all caps key', () => {
     expect(() => {
       new Cipher('ABCDEF');
     }).toThrow(new Error('Bad key'));

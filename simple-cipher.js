@@ -1,4 +1,15 @@
-module.exports = function Cipher() {
+module.exports = function Cipher(userKey) {
+  /* returns nothing if the userKey is good, throws an error if the userKey is
+   * bad for some reason
+   */
+  this.validateKey = (key) => {
+    for (let i = 0; i < key.length; i += 1) {
+      if (!'abcdefghijklmnopqrstuvwxyz'.includes(key[i])) {
+        throw new Error('Bad key');
+      }
+    }
+  };
+
   this.randomString = (length) => {
     const alphabet = 'abcdefghijklmnopqrstuvwxyz';
     let result = '';
@@ -6,7 +17,13 @@ module.exports = function Cipher() {
     return result;
   };
 
-  this.key = this.randomString(100);
+  // setup the key to use
+  if (userKey === undefined) {
+    this.key = this.randomString(100);
+  } else {
+    this.validateKey(userKey);
+    this.key = userKey;
+  }
 
   /*
    * Example:
