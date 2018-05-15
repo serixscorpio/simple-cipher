@@ -3,6 +3,9 @@ module.exports = function Cipher(userKey) {
    * bad for some reason
    */
   this.validateKey = (key) => {
+    if (key.length === 0) {
+      throw new Error('Bad key');
+    }
     for (let i = 0; i < key.length; i += 1) {
       if (!'abcdefghijklmnopqrstuvwxyz'.includes(key[i])) {
         throw new Error('Bad key');
