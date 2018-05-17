@@ -62,7 +62,7 @@ module.exports = class Cipher {
     return shiftedAsciiCode;
   }
 
-  substitute(inputChar, i, shiftFn) {
+  substituteRight(inputChar, i) {
     const keyChar = this.key[i % this.key.length];
     // 1. turn inputChar into ascii
     const inputAscii = inputChar.charCodeAt();
@@ -70,33 +70,26 @@ module.exports = class Cipher {
     // 3. calculate how many positions to shift based on step 2
     const positionsToShift = Cipher.calculatePositionsToShift(keyChar);
     // 4. calculate the shifted ascii code
-    const shiftedAsciiCode = shiftFn(inputAscii, positionsToShift);
+    const shiftedAsciiCode = Cipher.shiftRight(inputAscii, positionsToShift);
     // 5. turn the shifted ascii code back into character
     return String.fromCharCode(shiftedAsciiCode);
   }
 
+  substituteLeft(inputChar, i) {
+    const keyChar = this.key[i % this.key.length];
+    const inputAscii = inputChar.charCodeAt();
+    const positionsToShift = Cipher.calculatePositionsToShift(keyChar);
+    const shiftedAsciiCode = Cipher.shiftLeft(inputAscii, positionsToShift);
+    return String.fromCharCode(shiftedAsciiCode);
+  }
+
   encode(plaintext) {
-    // plaintext 'aaa...'
+      // plaintext 'aaa...'
     // output: 'bbb...' given the key is 'bbb...'
-    let ciphertext = '';
-    for (let i = 0; i < plaintext.length; i += 1) {
-      // we narrow down the problem to only allowing lowercase a-z
-
-      const plainChar = plaintext[i];
-      const cipherChar = this.substitute(plainChar, i, Cipher.shiftRight);
-
-      ciphertext += cipherChar;
-    }
-    return ciphertext;
+  	return plaintext.split("").map(this.substituteRight,this).join("")
   }
 
   decode(ciphertext) {
-    let decodetext = '';
-    for (let i = 0; i < ciphertext.length; i += 1) {
-      const cipherChar = ciphertext[i];
-      const decodedChar = this.substitute(cipherChar, i, Cipher.shiftLeft);
-      decodetext += decodedChar;
-    }
-    return decodetext;
+    return ciphertext.split("").map(this.substituteLeft,this).join("")
   }
 };
