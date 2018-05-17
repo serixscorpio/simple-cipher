@@ -62,7 +62,8 @@ module.exports = class Cipher {
     return shiftedAsciiCode;
   }
 
-  static substitute(inputChar, keyChar, shiftFn) {
+  substitute(inputChar, i, shiftFn) {
+    const keyChar = this.key[i % this.key.length];
     // 1. turn inputChar into ascii
     const inputAscii = inputChar.charCodeAt();
     // 2. turn keyChar into ascii
@@ -82,8 +83,7 @@ module.exports = class Cipher {
       // we narrow down the problem to only allowing lowercase a-z
 
       const plainChar = plaintext[i];
-      const keyChar = this.key[i % this.key.length];
-      const cipherChar = Cipher.substitute(plainChar, keyChar, Cipher.shiftRight);
+      const cipherChar = this.substitute(plainChar, i, Cipher.shiftRight);
 
       ciphertext += cipherChar;
     }
@@ -94,8 +94,7 @@ module.exports = class Cipher {
     let decodetext = '';
     for (let i = 0; i < ciphertext.length; i += 1) {
       const cipherChar = ciphertext[i];
-      const keyChar = this.key[i];
-      const decodedChar = Cipher.substitute(cipherChar, keyChar, Cipher.shiftLeft);
+      const decodedChar = this.substitute(cipherChar, i, Cipher.shiftLeft);
       decodetext += decodedChar;
     }
     return decodetext;
