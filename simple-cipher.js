@@ -79,7 +79,7 @@ module.exports = function Cipher(userKey) {
       // we narrow down the problem to only allowing lowercase a-z
 
       const plainChar = plaintext[i];
-      const keyChar = this.key[i];
+      const keyChar = this.key[i % this.key.length];
       const cipherChar = this.substitute(plainChar, keyChar, this.shiftRight);
 
       ciphertext += cipherChar;
